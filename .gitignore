@@ -11,3 +11,5 @@ dist
 node_modules
 
 popup-ui-1.0.0.tgz
+
+.idea

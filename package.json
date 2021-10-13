@@ -29,5 +29,7 @@
   "devDependencies": {
     "metro-react-native-babel-preset": "^0.60.0"
   },
-  "dependencies": {}
+  "dependencies": {
+    "react-native-awesome-alerts": "^1.5.2"
+  }
 }

@@ -4,12 +4,12 @@ import PropTypes from 'prop-types'
 
 import Popup from '../Popup'
 import Toast from '../Toast'
-
+import Alert from '../Alert'
 
 class Root extends Component {
   render() {
     return (
-      <View 
+      <View
         ref={c => (this._root = c)}
         style={{ flex: 1 }}
         {...this.props}
@@ -20,8 +20,14 @@ class Root extends Component {
             if (c) Popup.popupInstance = c
           }}
         />
-        
-        <Toast 
+
+        <Toast
+          ref={c => {
+            if (c) Toast.toastInstance = c
+          }}
+        />
+
+        <Alert
           ref={c => {
             if (c) Toast.toastInstance = c
           }}
