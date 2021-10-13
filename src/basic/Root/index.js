@@ -29,7 +29,7 @@ class Root extends Component {
 
         <Alert
           ref={c => {
-            if (c) Toast.toastInstance = c
+            if (c) Alert.alertInstance = c
           }}
         />
       </View>

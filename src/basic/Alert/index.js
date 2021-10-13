@@ -2,14 +2,14 @@ import React, { Component } from 'react'
 import AwesomeAlert from "react-native-awesome-alerts";
 
 class Alert extends Component {
-    static popupInstance
+    static alertInstance
 
     static show({ ...config }) {
-        this.popupInstance.start(config)
+        this.alertInstance.start(config)
     }
 
     static hide() {
-        this.popupInstance.hidePopup()
+        this.alertInstance.hidePopup()
     }
 
     state = {
