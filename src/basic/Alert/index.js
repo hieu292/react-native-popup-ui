@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import AwesomeAlert from "react-native-awesome-alerts";
+import {isPromise} from "../../utils/isPromise";
 
 class Alert extends Component {
     static alertInstance
@@ -14,6 +15,8 @@ class Alert extends Component {
 
     state = {
         showAlert: false,
+        isCancelLoading: false,
+        isConfirmLoading: false,
     }
 
     start({ ...config }) {
@@ -29,8 +32,10 @@ class Alert extends Component {
             confirmText: config.confirmText || "Ok",
             cancelButtonColor: config.cancelButtonColor || "#D0D0D0",
             confirmButtonColor: config.confirmButtonColor || "#AEDEF4",
-            onCancelPressed: config.onCancelPressed || this.hidePopup,
-            onConfirmPressed: config.onConfirmPressed || this.hidePopup,
+            onCancelPressed: config.onCancelPressed,
+            onConfirmPressed: config.onConfirmPressed,
+            isCancelLoading: false,
+            isConfirmLoading: false,
         })
     }
 
@@ -38,12 +43,43 @@ class Alert extends Component {
         this.setState({showAlert: false})
     }
 
+    handleCancelPress = async () => {
+        const {onCancelPressed} = this.state;
+
+        if(onCancelPressed){
+            this.setState({isCancelLoading: true})
+            const p = onCancelPressed()
+            if(isPromise(p)){
+                await p;
+            }
+            this.setState({isCancelLoading: false})
+        }
+        this.hidePopup();
+    }
+
+    handleConfirmPress = async () => {
+        const {onConfirmPressed} = this.state;
+
+        if(onConfirmPressed){
+            this.setState({isConfirmLoading: true})
+            const p = onConfirmPressed();
+            if(isPromise(p)){
+                await p;
+            }
+            this.setState({isConfirmLoading: false})
+        }
+        this.hidePopup();
+    }
+
     render() {
         const {
             title, showAlert, textBody, closeOnTouchOutside, closeOnHardwareBackPress,
             showCancelButton, showConfirmButton, cancelText, confirmText,
-            onCancelPressed, onConfirmPressed, confirmButtonColor, cancelButtonColor
-        } = this.state
+            confirmButtonColor, cancelButtonColor,
+            isCancelLoading, isConfirmLoading
+        } = this.state;
+
+        const isDisableBtn = isCancelLoading || isConfirmLoading;
 
         return (
             <AwesomeAlert
@@ -60,8 +96,10 @@ class Alert extends Component {
                 confirmText={confirmText}
                 confirmButtonColor={confirmButtonColor}
                 cancelButtonColor={cancelButtonColor}
-                onCancelPressed={onCancelPressed}
-                onConfirmPressed={onConfirmPressed}
+                isCancelLoading={isCancelLoading}
+                isConfirmLoading={isConfirmLoading}
+                onCancelPressed={isDisableBtn ? () => {} : this.handleCancelPress}
+                onConfirmPressed={isDisableBtn ? () => {} : this.handleConfirmPress}
             />
         )
     }

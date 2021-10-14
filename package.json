@@ -30,6 +30,6 @@
     "metro-react-native-babel-preset": "^0.60.0"
   },
   "dependencies": {
-    "react-native-awesome-alerts": "^1.5.2"
+    "react-native-awesome-alerts": "git://github.com/hieu292/react-native-awesome-alerts.git#a11d3fa1fc96225a19c67196ed7a116a3452c0ed"
   }
 }
