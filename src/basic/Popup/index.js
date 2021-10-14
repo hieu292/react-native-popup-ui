@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
-import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Dimensions, Alert } from 'react-native'
+import { View, Text, TouchableOpacity, StyleSheet, Image, Animated, Dimensions, Alert, ActivityIndicator } from 'react-native'
+import {isPromise} from "../../utils/isPromise";
 
 const WIDTH = Dimensions.get('screen').width
 const HEIGHT = Dimensions.get('screen').height
@@ -19,7 +20,8 @@ class Popup extends Component {
 		positionView: new Animated.Value(HEIGHT),
 		opacity: new Animated.Value(0),
 		positionPopup: new Animated.Value(HEIGHT),
-		popupHeight: 0
+		popupHeight: 0,
+		isLoading: false,
 	}
 
 	start({ ...config }) {
@@ -30,10 +32,11 @@ class Popup extends Component {
 			textBody: config.textBody,
 			button: config.button !== undefined ? config.button : true,
 			buttonText: config.buttonText || 'Ok',
-			callback: config.callback !== undefined ? config.callback : this.defaultCallback(),
+			callback: config.callback,
 			background: config.background || 'rgba(0, 0, 0, 0.5)',
 			timing: config.timing,
-			autoClose: config.autoClose !== undefined ? config.autoClose : false
+			autoClose: config.autoClose !== undefined ? config.autoClose : false,
+			isLoading: false,
 		})
 
 		Animated.sequence([
@@ -82,16 +85,6 @@ class Popup extends Component {
 		]).start()
 	}
 
-	defaultCallback() {
-		return Alert.alert(
-			'Callback!',
-			'Callback complete!',
-			[
-				{ text: 'Ok', onPress: () => this.hidePopup() }
-			]
-		)
-	}
-
 	handleImage(type) {
 		switch (type) {
 			case 'Success': return require('../../assets/Success.png')
@@ -100,16 +93,34 @@ class Popup extends Component {
 		}
 	}
 
+	handlePress = async () => {
+		const {callback} = this.state;
+
+		if(callback){
+			this.setState({isLoading: true})
+			const p = callback()
+			if(isPromise(p)){
+				await p;
+			}
+			this.setState({isLoading: false})
+		}
+		this.hidePopup();
+	}
+
 	render() {
-		const { title, type, textBody, button, buttonText, callback, background } = this.state
+		const { title, type, textBody, buttonText, background, isLoading } = this.state
 		let el = null;
 		if (this.state.button) {
-			el = <TouchableOpacity style={[styles.Button, styles[type]]} onPress={callback}>
-				<Text style={styles.TextButton}>{buttonText}</Text>
+			el = <TouchableOpacity style={[styles.Button, styles[type]]} onPress={isLoading ? () => {} : this.handlePress}>
+				{
+					isLoading ?
+						<ActivityIndicator size="large" color={styles.TextButton.color} /> :
+						<Text style={styles.TextButton}>{buttonText}</Text>
+				}
 			</TouchableOpacity>
 		}
 		else {
-			el = <Text></Text>
+			el = <Text/>
 		}
 		return (
 			<Animated.View
