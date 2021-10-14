@@ -737,9 +737,9 @@ react-is@^16.8.1:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-16.13.1.tgz#789729a4dc36de2999dc156dd6c1d9c18cea56a4"
   integrity sha512-24e6ynE2H+OKt4kqsOvNd8kBpV65zoxbA4BVsEOB3ARVWQki/DHzaUoC5KuON/BiccDaCCTZBuOcfZs70kR8bQ==
 
-"react-native-awesome-alerts@git://github.com/hieu292/react-native-awesome-alerts.git#a11d3fa1fc96225a19c67196ed7a116a3452c0ed":
+"react-native-awesome-alerts@git://github.com/hieu292/react-native-awesome-alerts.git#080ab6b2706901fc07de53dda111f180de4f6a7a":
   version "1.5.2"
-  resolved "git://github.com/hieu292/react-native-awesome-alerts.git#a11d3fa1fc96225a19c67196ed7a116a3452c0ed"
+  resolved "git://github.com/hieu292/react-native-awesome-alerts.git#080ab6b2706901fc07de53dda111f180de4f6a7a"
   dependencies:
     prop-types "^15.7.2"
 
